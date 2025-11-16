@@ -10,7 +10,7 @@ import (
 	"database/sql"
 )
 
-const createAuthor = `-- name: CreateAuthor :one
+const createPerson = `-- name: CreatePerson :one
 INSERT INTO person (
   name, ambition
 ) VALUES (
@@ -19,25 +19,38 @@ INSERT INTO person (
 RETURNING id, name, ambition
 `
 
-type CreateAuthorParams struct {
+type CreatePersonParams struct {
 	Name     string         `json:"name"`
 	Ambition sql.NullString `json:"ambition"`
 }
 
-func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (Person, error) {
-	row := q.db.QueryRowContext(ctx, createAuthor, arg.Name, arg.Ambition)
+func (q *Queries) CreatePerson(ctx context.Context, arg CreatePersonParams) (Person, error) {
+	row := q.db.QueryRowContext(ctx, createPerson, arg.Name, arg.Ambition)
 	var i Person
 	err := row.Scan(&i.ID, &i.Name, &i.Ambition)
 	return i, err
 }
 
-const getAuthor = `-- name: GetAuthor :one
+const getPerson = `-- name: GetPerson :one
 SELECT id, name, ambition FROM person
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetAuthor(ctx context.Context, id int64) (Person, error) {
-	row := q.db.QueryRowContext(ctx, getAuthor, id)
+func (q *Queries) GetPerson(ctx context.Context, id int64) (Person, error) {
+	row := q.db.QueryRowContext(ctx, getPerson, id)
+	var i Person
+	err := row.Scan(&i.ID, &i.Name, &i.Ambition)
+	return i, err
+}
+
+const getPersonByName = `-- name: GetPersonByName :one
+SELECT id, name, ambition
+FROM person
+WHERE name = $1
+`
+
+func (q *Queries) GetPersonByName(ctx context.Context, name string) (Person, error) {
+	row := q.db.QueryRowContext(ctx, getPersonByName, name)
 	var i Person
 	err := row.Scan(&i.ID, &i.Name, &i.Ambition)
 	return i, err
