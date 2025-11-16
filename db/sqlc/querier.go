@@ -9,9 +9,19 @@ import (
 )
 
 type Querier interface {
+	AddUserExp(ctx context.Context, arg AddUserExpParams) (User, error)
 	CreatePerson(ctx context.Context, arg CreatePersonParams) (Person, error)
+	CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	GetCompleteTask(ctx context.Context, userID int64) (Task, error)
 	GetPerson(ctx context.Context, id int64) (Person, error)
 	GetPersonByName(ctx context.Context, name string) (Person, error)
+	GetTaskByUserId(ctx context.Context, userID int64) (Task, error)
+	GetUndoneTaskByUserId(ctx context.Context, userID int64) (Task, error)
+	GetUserByUserId(ctx context.Context, userID int64) (User, error)
+	GetUserByUsername(ctx context.Context, username string) (User, error)
+	ListTasksByUser(ctx context.Context, userID int64) ([]Task, error)
+	UpdateTaskStatus(ctx context.Context, arg UpdateTaskStatusParams) (Task, error)
 }
 
 var _ Querier = (*Queries)(nil)

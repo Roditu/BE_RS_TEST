@@ -4,7 +4,7 @@ CREATE TABLE "person" (
   "ambition" varchar
 );
 
-CREATE TABLE "user" (
+CREATE TABLE "users" (
   "user_id" bigserial PRIMARY KEY,
   "username" varchar NOT NULL,
   "password" varchar NOT NULL,
@@ -20,4 +20,4 @@ CREATE TABLE "task" (
   "status" varchar NOT NULL DEFAULT 'UNFINISHED'
 );
 
-ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("user_id");
+ALTER TABLE "task" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");

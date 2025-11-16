@@ -21,8 +21,10 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 
+	tokenMaker := util.NewJWTMaker("supersecretkey")
+
 	store := db.NewStore(conn)
-	server := api.NewServer(store)
+	server := api.NewServer(store, tokenMaker)
 
 	err = server.Start(config.ServerAddress)
 	if err != nil {
